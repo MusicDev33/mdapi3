@@ -1,6 +1,7 @@
 package server
 
 import (
+	"MusicDev33/mdapi3/internal/zokyo"
 	"fmt"
 	"net/http"
 
@@ -25,6 +26,8 @@ func NewServer() *Server {
 	// TODO: Add some middleware
 
 	r.GET("/test", TestRoute)
+	r.POST("/auth", zokyo.AuthRoute)
+	r.POST("/login/create", zokyo.CreateLoginRoute)
 
 	return &Server{
 		router: r,
