@@ -1,22 +1,15 @@
 package main
 
 import (
+	"MusicDev33/mdapi3/internal/config"
 	"MusicDev33/mdapi3/internal/server"
 	"context"
 	"fmt"
-	"os"
 	"time"
 
-	"github.com/goccy/go-yaml"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type Config struct {
-	Port      int    `yaml:"port"`
-	MongoPort int    `yaml:"mongoPort"`
-	DBName    string `yaml:"dbName"`
-}
 
 type Mongo struct {
 	Client *mongo.Client
@@ -45,19 +38,11 @@ func (m *Mongo) Close() error {
 }
 
 func main() {
-	f, err := os.ReadFile("config.yaml")
-	if err != nil {
-		panic(err)
-	}
-
-	var cfg Config
-	if err := yaml.Unmarshal(f, &cfg); err != nil {
-		panic(err)
-	}
+	cfg := config.Get()
 
 	uri := fmt.Sprintf("mongodb://localhost:%d", cfg.MongoPort)
 
-	_, err = InitMongo(uri, cfg.DBName)
+	_, err := InitMongo(uri, cfg.DBName)
 	if err != nil {
 		panic(err)
 	}
