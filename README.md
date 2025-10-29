@@ -1,5 +1,16 @@
 # mdapi3
 
+This repo's more of an experiment with AI coding agents. Essentially, I just made an empty repo with some Go code in it and then told Claude code to translate parts of MDAPI2 (written in TypeScript) into Go and put them in this repo. This README is also AI-generated too, though I'll probably chop it down soon. 
+
+## What I Learned
+AI in 2025 is damn impressive. I actually can't believe it was able to open my MDAPI2 repo and translate even just meaningfully small amounts of code into Go. It's not super great at the translation process though; I had to explicitly tell it not to just copy the structure of the old code base. It wasn't going to make the 'internal/' directory and was literally copying the directory structure from the TS version. Still some work to do there, but not really that big of a problem.
+
+I also deliberately chose Go. I've written enough both on my own time and at work to know the ins and outs fairly well, so I was able to keep it on the rails. I think this is going to be the make or break moment for a lot of AI devs (which is going to be a thing soon if it isn't already): if you don't understand what you're doing on a deep level, your code's going to look wack and if you ever need help debugging it, people are going to spend more time parsing through a non-idiomatic code base than really anything else.
+
+The PR was pretty big, and while that itself isn't a huge deal, because it was so easily generated, it's easy to see the PR itself as cheap. I only glanced over it to make sure nothing egregious made its way in, but these AI-generated PRs are probably going to be a gold mine of subtle logic errors. But maybe I'm just fearmongering here, I don't know. Just my predictions.
+
+Last, AI is so damn verbose. It's annoying when engineers make comments that say "looping through list and doing x". Like yes, I can see that. I know when you're adding middleware. If I read the code, it tells me what it's doing most of the time. AI feels the need to tell me every minute thing it's doing and that's kind of stupid. I also asked it on a separate occasion to dockerize something for me and it made me an entire Docker/Docker Compose setup, which I didn't really ask for. It's way too verbose, and I suspect a large part of our jobs will soon be taken up by hacking away at a lot of the stuff AI generates. The flip side of that coin is the AI being more conservative with the code it writes and then we spend more time prompting the AI, and I think that sounds less desirable.
+
 A Go-based AI chat API server supporting multiple AI engines (OpenAI GPT-4, Anthropic Claude, DeepSeek) with conversation management and user authentication.
 
 ## Features
