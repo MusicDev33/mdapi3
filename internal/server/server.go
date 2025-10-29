@@ -19,15 +19,24 @@ func TestRoute(c *gin.Context) {
 }
 
 func NewServer() *Server {
-	// TODO: Add a way to set this to debug if needed
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 
-	// TODO: Add some middleware
+	// Add middleware
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
+	// Test route
 	r.GET("/test", TestRoute)
+
+	// Zokyo routes
+	r.POST("/code", zokyo.CreateNewChatRoute)
+	r.GET("/convs/:username", zokyo.GetConversationsRoute)
+	r.GET("/msgs/:convId", zokyo.GetChatsByConvIdRoute)
+	r.GET("/verify/:username", zokyo.CheckWhitelistUserRoute)
 	r.POST("/auth", zokyo.AuthRoute)
 	r.POST("/login/create", zokyo.CreateLoginRoute)
+	r.DELETE("/convs/:convId", zokyo.DeleteConversationByIdRoute)
 
 	return &Server{
 		router: r,
