@@ -8,13 +8,14 @@ import (
 )
 
 type Config struct {
-	Port          int    `yaml:"port"`
-	MongoPort     int    `yaml:"mongoPort"`
-	DBName        string `yaml:"dbName"`
-	KeyAnthropic  string `yaml:"akAnthropic"`
-	KeyDeepSeek   string `yaml:"akDeepSeek"`
-	KeyOpenAI     string `yaml:"akOpenAI"`
-	WhitelistCORS string `yaml:"whitelistCors"`
+	Port           int      `yaml:"port"`
+	MongoPort      int      `yaml:"mongoPort"`
+	DBName         string   `yaml:"dbName"`
+	KeyAnthropic   string   `yaml:"akAnthropic"`
+	KeyDeepSeek    string   `yaml:"akDeepSeek"`
+	KeyOpenAI      string   `yaml:"akOpenAI"`
+	WhitelistCORS  string   `yaml:"whitelistCors"`
+	WhitelistUsers []string `yaml:"whitelistUsers"`
 }
 
 var (
