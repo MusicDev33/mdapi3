@@ -4,7 +4,7 @@ FROM golang:1.21-alpine AS builder
 WORKDIR /app
 
 # Copy go mod files
-COPY go.mod go.sum ./
+COPY go.mod go.sum config.yaml ./
 RUN go mod download
 
 # Copy source code
@@ -22,6 +22,7 @@ WORKDIR /root/
 
 # Copy binary from builder
 COPY --from=builder /app/main .
+COPY --from=builder /app/config.yaml .
 
 EXPOSE 3010
 
