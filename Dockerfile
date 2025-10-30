@@ -7,7 +7,10 @@ RUN go mod download
 
 COPY . .
 
+RUN apk add --no-cache upx
+
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-w -s" -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w -buildid=" -o main . && upx --best --lzma main
 
 # PROD
 FROM scratch
