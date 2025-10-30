@@ -13,13 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type Config struct {
-	Port      int    `yaml:"port"`
-	MongoPort int    `yaml:"mongoPort"`
-	MongoURI  string `yaml:"mongoUri"`
-	DBName    string `yaml:"dbName"`
-}
-
 type Mongo struct {
 	Client *mongo.Client
 	DB     *mongo.Database
