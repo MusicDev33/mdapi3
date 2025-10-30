@@ -29,14 +29,17 @@ func NewServer() *Server {
 	// Test route
 	r.GET("/test", TestRoute)
 
-	// Zokyo routes
-	r.POST("/code", zokyo.CreateNewChatRoute)
-	r.GET("/convs/:username", zokyo.GetConversationsRoute)
-	r.GET("/msgs/:convId", zokyo.GetChatsByConvIdRoute)
-	r.GET("/verify/:username", zokyo.CheckWhitelistUserRoute)
-	r.POST("/auth", zokyo.AuthRoute)
-	r.POST("/login/create", zokyo.CreateLoginRoute)
-	r.DELETE("/convs/:convId", zokyo.DeleteConversationByIdRoute)
+	// Zokyo routes group
+	zokyoGroup := r.Group("/zokyo")
+	{
+		zokyoGroup.POST("/code", zokyo.CreateNewChatRoute)
+		zokyoGroup.GET("/convs/:username", zokyo.GetConversationsRoute)
+		zokyoGroup.GET("/msgs/:convId", zokyo.GetChatsByConvIdRoute)
+		zokyoGroup.GET("/verify/:username", zokyo.CheckWhitelistUserRoute)
+		zokyoGroup.POST("/auth", zokyo.AuthRoute)
+		zokyoGroup.POST("/login/create", zokyo.CreateLoginRoute)
+		zokyoGroup.DELETE("/convs/:convId", zokyo.DeleteConversationByIdRoute)
+	}
 
 	return &Server{
 		router: r,
