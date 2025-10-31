@@ -166,7 +166,7 @@ func generateChatClaude(messages []Message, agentConfig AgentConfig, apiKey stri
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("Anthropic API error: %s", string(body))
+		return "", fmt.Errorf("anthropic API error: %s", string(body))
 	}
 
 	var result map[string]interface{}

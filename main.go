@@ -55,7 +55,6 @@ func main() {
 
 	fmt.Printf("Connected to MongoDB at %s\n", uri)
 
-	// Create and start server
 	srv := server.NewServer()
 
 	fmt.Printf("Starting server on port %d...\n", cfg.Port)

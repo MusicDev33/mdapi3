@@ -27,9 +27,7 @@ var nouns = []string{
 	"umbrella", "violin", "whirlpool", "xylophone", "yacht", "zeppelin",
 }
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
+func init() {}
 
 func capitalize(s string) string {
 	if len(s) == 0 {
@@ -39,7 +37,8 @@ func capitalize(s string) string {
 }
 
 func GenerateName() string {
-	adj := adjectives[rand.Intn(len(adjectives))]
-	noun := nouns[rand.Intn(len(nouns))]
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	adj := adjectives[r.Intn(len(adjectives))]
+	noun := nouns[r.Intn(len(nouns))]
 	return fmt.Sprintf("%s %s", capitalize(adj), capitalize(noun))
 }

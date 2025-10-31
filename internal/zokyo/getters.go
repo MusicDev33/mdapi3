@@ -22,7 +22,8 @@ func GetConversationsRoute(c *gin.Context) {
 	collection := database.DB.DB.Collection("conversations")
 
 	// Find all conversations for the user, sorted by _id descending, limit 500
-	opts := options.Find().SetSort(bson.D{{Key: "_id", Value: -1}}).SetLimit(500)
+	const maxConvs = 500
+	opts := options.Find().SetSort(bson.D{{Key: "_id", Value: -1}}).SetLimit(maxConvs)
 	cursor, err := collection.Find(ctx, bson.M{"user": username}, opts)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"success": false, "msg": "Something went wrong"})
