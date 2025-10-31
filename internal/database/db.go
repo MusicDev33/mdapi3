@@ -31,7 +31,9 @@ func InitMongo(uri string, dbName string) (*MongoDB, error) {
 }
 
 func (m *MongoDB) Close() error {
-	return m.Client.Disconnect(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return m.Client.Disconnect(ctx)
 }
 
 // Global database instance

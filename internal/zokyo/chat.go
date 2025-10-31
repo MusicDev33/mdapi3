@@ -1,6 +1,7 @@
 package zokyo
 
 import (
+	"MusicDev33/mdapi3/internal/config"
 	"MusicDev33/mdapi3/internal/database"
 	"MusicDev33/mdapi3/internal/models"
 	"context"
@@ -15,7 +16,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const tokenThreshold = 4096 * 2
+var tokenThreshold = 1024 * config.Get().ContextLength
 
 type CreateChatRequest struct {
 	User   string     `json:"user" binding:"required"`

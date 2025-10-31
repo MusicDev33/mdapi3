@@ -11,6 +11,7 @@ type Config struct {
 	Port           int      `yaml:"port"`
 	MongoPort      int      `yaml:"mongoPort"`
 	MongoURI       string   `yaml:"mongoUri"`
+	ContextLength  int      `yaml:"contextLength"`
 	DBName         string   `yaml:"dbName"`
 	KeyAnthropic   string   `yaml:"akAnthropic"`
 	KeyDeepSeek    string   `yaml:"akDeepSeek"`

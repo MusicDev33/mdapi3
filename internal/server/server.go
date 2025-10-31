@@ -22,14 +22,11 @@ func NewServer() *Server {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 
-	// Add middleware
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	// Test route
 	r.GET("/test", TestRoute)
 
-	// Zokyo routes group
 	zokyoGroup := r.Group("/zokyo")
 	{
 		zokyoGroup.POST("/code", zokyo.CreateNewChatRoute)
