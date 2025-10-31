@@ -6,6 +6,7 @@ import (
 	"MusicDev33/mdapi3/internal/models"
 	"context"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,8 @@ type UserData struct {
 	ID       primitive.ObjectID `json:"_id"`
 }
 
+const ZUsersCol = "zusers"
+
 // AuthRoute handles user authentication
 func AuthRoute(c *gin.Context) {
 	var req AuthRequest
@@ -37,7 +40,7 @@ func AuthRoute(c *gin.Context) {
 
 	// Find user by username
 	var user models.ZUser
-	collection := database.DB.DB.Collection("zusers")
+	collection := database.DB.DB.Collection(ZUsersCol)
 	err := collection.FindOne(ctx, bson.M{"username": req.Username}).Decode(&user)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"success": false, "msg": GetUserNotFoundMsg()})
@@ -71,13 +74,7 @@ func CreateLoginRoute(c *gin.Context) {
 	cfg := config.Get()
 
 	// Check if username is in whitelist
-	isWhitelisted := false
-	for _, u := range cfg.WhitelistUsers {
-		if u == req.Username {
-			isWhitelisted = true
-			break
-		}
-	}
+	isWhitelisted := slices.Contains(cfg.WhitelistUsers, req.Username)
 
 	if !isWhitelisted {
 		c.JSON(http.StatusUnauthorized, gin.H{"success": false})
@@ -103,7 +100,7 @@ func CreateLoginRoute(c *gin.Context) {
 		UpdatedAt: time.Now(),
 	}
 
-	collection := database.DB.DB.Collection("zusers")
+	collection := database.DB.DB.Collection(ZUsersCol)
 	_, err = collection.InsertOne(ctx, newUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"success": false})
@@ -127,7 +124,7 @@ func CheckWhitelistUserRoute(c *gin.Context) {
 
 	// Check if user already exists
 	var user models.ZUser
-	collection := database.DB.DB.Collection("zusers")
+	collection := database.DB.DB.Collection(ZUsersCol)
 	err := collection.FindOne(ctx, bson.M{"username": username}).Decode(&user)
 	if err == nil {
 		// User already exists
@@ -138,11 +135,9 @@ func CheckWhitelistUserRoute(c *gin.Context) {
 	cfg := config.Get()
 
 	// Check if username is in whitelist
-	for _, u := range cfg.WhitelistUsers {
-		if u == username {
-			c.JSON(http.StatusOK, gin.H{"success": true})
-			return
-		}
+	if slices.Contains(cfg.WhitelistUsers, username) {
+		c.JSON(http.StatusOK, gin.H{"success": true})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"success": false})

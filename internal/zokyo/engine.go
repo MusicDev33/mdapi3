@@ -33,19 +33,16 @@ type AgentConfig struct {
 func CountTokens(messages []Message, threshold int) bool {
 	total := 0
 	for _, msg := range messages {
-		// Rough approximation: 4 chars = 1 token
 		total += len(msg.Content) / 4
 	}
 	return total <= threshold
 }
 
-// GetSystemPrompt returns the system prompt with current date
 func GetSystemPrompt() string {
 	now := time.Now()
 	return fmt.Sprintf("The date is %s in San Francisco.", now.Format("January 2, 2006, 3:04 PM (Monday)"))
 }
 
-// GenerateChat calls the appropriate AI API based on the engine
 func GenerateChat(engine ChatEngine, messages []Message, agentConfig AgentConfig) (string, error) {
 	cfg := config.Get()
 
@@ -64,11 +61,11 @@ func GenerateChat(engine ChatEngine, messages []Message, agentConfig AgentConfig
 func generateChatOpenAI(messages []Message, agentConfig AgentConfig, apiKey string) (string, error) {
 	url := "https://api.openai.com/v1/chat/completions"
 
-	reqBody := map[string]interface{}{
+	reqBody := map[string]any{
 		"messages":    messages,
 		"top_p":       agentConfig.TopP,
 		"temperature": agentConfig.Temperature,
-		"model":       "gpt-4o",
+		"model":       "gpt-5-2025-08-07",
 	}
 
 	jsonData, err := json.Marshal(reqBody)
@@ -134,8 +131,8 @@ func generateChatClaude(messages []Message, agentConfig AgentConfig, apiKey stri
 	reqBody := map[string]interface{}{
 		"messages":    messages,
 		"temperature": agentConfig.Temperature,
-		"model":       "claude-3-7-sonnet-20250219",
-		"max_tokens":  1024,
+		"model":       "claude-sonnet-4-5",
+		"max_tokens":  4096,
 		"system":      GetSystemPrompt(),
 	}
 
@@ -169,17 +166,17 @@ func generateChatClaude(messages []Message, agentConfig AgentConfig, apiKey stri
 		return "", fmt.Errorf("anthropic API error: %s", string(body))
 	}
 
-	var result map[string]interface{}
+	var result map[string]any
 	if err := json.Unmarshal(body, &result); err != nil {
 		return "", err
 	}
 
-	content, ok := result["content"].([]interface{})
+	content, ok := result["content"].([]any)
 	if !ok || len(content) == 0 {
 		return "", errors.New("no content in response")
 	}
 
-	contentBlock, ok := content[0].(map[string]interface{})
+	contentBlock, ok := content[0].(map[string]any)
 	if !ok {
 		return "", errors.New("invalid content format")
 	}
@@ -195,7 +192,7 @@ func generateChatClaude(messages []Message, agentConfig AgentConfig, apiKey stri
 func generateChatDeepSeek(messages []Message, agentConfig AgentConfig, apiKey string) (string, error) {
 	url := "https://api.deepseek.com/v1/chat/completions"
 
-	reqBody := map[string]interface{}{
+	reqBody := map[string]any{
 		"messages":    messages,
 		"temperature": agentConfig.Temperature,
 		"model":       "deepseek-chat",
@@ -231,22 +228,22 @@ func generateChatDeepSeek(messages []Message, agentConfig AgentConfig, apiKey st
 		return "", fmt.Errorf("DeepSeek API error: %s", string(body))
 	}
 
-	var result map[string]interface{}
+	var result map[string]any
 	if err := json.Unmarshal(body, &result); err != nil {
 		return "", err
 	}
 
-	choices, ok := result["choices"].([]interface{})
+	choices, ok := result["choices"].([]any)
 	if !ok || len(choices) == 0 {
 		return "", errors.New("no choices in response")
 	}
 
-	choice, ok := choices[0].(map[string]interface{})
+	choice, ok := choices[0].(map[string]any)
 	if !ok {
 		return "", errors.New("invalid choice format")
 	}
 
-	message, ok := choice["message"].(map[string]interface{})
+	message, ok := choice["message"].(map[string]any)
 	if !ok {
 		return "", errors.New("invalid message format")
 	}
